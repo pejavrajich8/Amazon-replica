@@ -1,66 +1,19 @@
 <!-- index.html: Main marketplace dashboard with product grid -->
 <!doctype html>
 <html>
-  <head>
+    <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marketplace - Dashboard</title>
     <!-- Tailwind CDN for quick styling in this demo -->
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
+
+
   <body class="bg-gray-50 min-h-screen">
-  <!-- Header: branding, search and cart summary -->
-  <header class="bg-gray-900 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <!-- Left: Logo / brand -->
-        <div class="flex items-center space-x-4">
-          <div class="flex items-center space-x-2">
-            <!-- Brand name and subtitle -->
-            <div class="text-yellow-400 text-2xl font-extrabold">amazon</div>
-            <div class="hidden sm:block text-gray-300">Marketplace</div>
-          </div>
-        </div>
-
-        <!-- Center: Search input (visual only) - layout and comments match components/header.html -->
-        <div class="flex-1 px-4">
-          <div class="max-w-3xl mx-auto">
-            <!-- Accessible label hidden visually -->
-            <label for="search" class="sr-only">Search</label>
-            <div class="relative">
-              <!-- Left: white search input with rounded left corners; right edge is flush with the button -->
-              <input id="search" name="search" class="block w-full rounded-md rounded-r-md py-3 pl-4 pr-14 text-sm text-gray-900 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-300" placeholder="Search" />
-              <!-- Right: tan rectangular search button with magnifying icon -->
-              <button aria-label="Search" class="absolute right-0 top-0 bottom-0 bg-yellow-400 hover:bg-yellow-400 text-black px-4 rounded-r-md flex items-center justify-center" style="border-left:1px solid rgba(0,0,0,0.08);">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="6" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right: Account/returns and cart button -->
-        <div class="flex items-center space-x-4">
-          <div class="hidden sm:flex sm:items-center sm:space-x-2 text-sm text-gray-300">
-            <div class="text-right">
-              <div class="font-medium">Returns</div>
-              <div class="text-xs">& Orders</div>
-            </div>
-            <div class="relative">
-              <!-- Cart button with item count badge (static) -->
-              <button class="flex items-center space-x-2 bg-gray-800 px-3 py-2 rounded">
-                <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4"></path></svg>
-                <span class="ml-1">Cart</span>
-                <span class="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-700 bg-white rounded-full">3</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
+  <!-- Header loaded from components/header.html -->
+  <div id="site-header"></div>
+  <script type="module" src="/components/include-header.js"></script>
 
     <!-- Main: product grid rendered inline for this demo -->
     <main class="py-8">
@@ -172,6 +125,7 @@
         </div>
       </div>
     </main>
+
 
   <!-- Footer: copyright and links -->
   <footer class="bg-gray-100 text-gray-700">

@@ -1,5 +1,5 @@
-import Product from "../componants/Product.js";
-import cart from "../componants/cart.js";
+import Product from "../components/Product.js";
+import cart from "../components/cart.js";
 
 
 

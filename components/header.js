@@ -1,3 +1,7 @@
+// components/header.js
+// Export a renderHeader function that injects the header HTML into the page.
+export function renderHeader(targetId = 'site-header') {
+  const html = `
 <header class="bg-gray-900 text-white">
   <!-- Header -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,7 +44,7 @@
             <div class="text-xs">& Orders</div>
           </div>
           <div class="relative">
-            <a href="/cart.html" class="flex items-center space-x-2 bg-gray-800 px-3 py-2 rounded">
+            <a href="/cart.html" class="open-cart flex items-center space-x-2 bg-gray-800 px-3 py-2 rounded">
               <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4"></path></svg>
               <span class="ml-1">Cart</span>
               <span class="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-700 bg-white rounded-full">3</span>
@@ -51,4 +55,17 @@
     </div>
   </div>
 </header>
+`;
 
+  const placeholder = document.getElementById(targetId);
+  if (placeholder) {
+    placeholder.innerHTML = html;
+  } else {
+    // Fallback: insert at top of body
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = html;
+    document.body.insertBefore(wrapper, document.body.firstChild);
+  }
+}
+
+export default renderHeader;

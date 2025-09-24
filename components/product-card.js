@@ -1,4 +1,7 @@
-<!-- Product card component: single product preview used in grids -->
+// components/product-card.js
+// Returns the HTML string for a single product card.
+export function productCardHTML() {
+  return `
 <article class="bg-white rounded shadow-sm overflow-hidden">
   <!-- Product image placeholder: preserves sizing and layout -->
   <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-500">Image placeholder</div>
@@ -13,3 +16,7 @@
     </div>
   </div>
 </article>
+`;
+}
+
+export default productCardHTML;

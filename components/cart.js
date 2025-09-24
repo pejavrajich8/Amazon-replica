@@ -1,61 +1,84 @@
-class Cart {
-    constructor() {
-        this.items = [];
-    }
+export function renderCartPage(cart, targetId = 'cart-container', updateHeader = () => {}) {
+  const container = document.getElementById(targetId);
+  if (!container) return;
 
-    get total() {
-        // return numeric total of item prices
-        return this.items.reduce((sum, item) => sum + (item.price || 0), 0);
-    }
+  const items = cart.getItems();
+  container.innerHTML = '';
 
-    // legacy method kept for compatibility
-    addItem(product) {
-        this.items.push(product);
-    }
+  const box = document.createElement('div');
+  box.className = 'bg-white p-6 rounded shadow';
 
-    // used by Product.js (cart.addToCart(...))
-    addToCart(product) {
-        this.addItem(product);
-        this.render();
-    }
+  if (!items.length) {
+    box.innerHTML = '<div class="text-gray-700">Your cart is empty.</div>';
+    container.appendChild(box);
+    return;
+  }
 
-    removeItem(product) {
-        this.items = this.items.filter(item => item !== product);
-        this.render();
-    }
+  const list = document.createElement('div');
+  list.className = 'space-y-4';
 
-    getItems() {
-        return this.items;
-    }
+  items.forEach(it => {
+    const row = document.createElement('div');
+    row.className = 'flex items-center justify-between border-b pb-3';
 
-    render() {
-        const container = document.getElementById("cart-container");
-        if (!container) return; // nothing to render
+    const left = document.createElement('div');
+    left.className = 'flex-1';
+    left.innerHTML = `<div class="font-medium text-gray-900">${it.name}</div>
+        <div class="text-sm text-gray-500">Qty: ${it.qty}</div>`;
 
-        const itemsHtml = this.items.length
-            ? this.items.map((it, idx) => `
-                <div class="cart-item" data-idx="${idx}">
-                    <span class="cart-name">${it.name}</span>
-                    <span class="cart-price">$${(it.price || 0).toFixed(2)}</span>
-                    <button class="cart-remove" data-idx="${idx}">Remove</button>
-                </div>`).join("")
-            : '<div class="cart-empty">Cart is empty</div>';
+    const right = document.createElement('div');
+    right.className = 'flex items-center gap-4';
+    const price = document.createElement('div');
+    price.className = 'text-right text-gray-900 font-semibold';
+    price.innerText = `$${(Number(it.price) * it.qty).toFixed(2)}`;
 
-        container.innerHTML = `
-        <h2>Shopping Cart</h2>
-        <div class="cart-items">${itemsHtml}</div>
-        <div class="cart-total">Total: $${this.total.toFixed(2)}</div>`;
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'text-sm text-red-600 hover:underline';
+    removeBtn.innerText = 'Remove';
+    removeBtn.addEventListener('click', () => {
+      cart.remove(it.id);
+      renderCartPage(cart, targetId, updateHeader);
+      updateHeader();
+    });
 
-        // attach remove handlers
-        container.querySelectorAll('.cart-remove').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const idx = Number(btn.dataset.idx);
-                const item = this.items[idx];
-                if (item) this.removeItem(item);
-            });
-        });
-    }
-};
+    right.appendChild(price);
+    right.appendChild(removeBtn);
 
-const cart = new Cart()
-export default cart;
+    row.appendChild(left);
+    row.appendChild(right);
+
+    list.appendChild(row);
+  });
+
+  const footer = document.createElement('div');
+  footer.className = 'mt-6 flex items-center justify-between';
+
+  const subtotal = document.createElement('div');
+  subtotal.className = 'text-lg font-semibold';
+  subtotal.innerText = `Subtotal: $${cart.getTotal().toFixed(2)}`;
+
+  const actions = document.createElement('div');
+  const clearBtn = document.createElement('button');
+  clearBtn.className = 'bg-red-500 text-white px-3 py-1 rounded mr-2';
+  clearBtn.innerText = 'Clear Cart';
+  clearBtn.addEventListener('click', () => {
+    cart.clear();
+    renderCartPage(cart, targetId, updateHeader);
+    updateHeader();
+  });
+
+  const checkout = document.createElement('a');
+  checkout.className = 'bg-yellow-400 text-black px-3 py-1 rounded';
+  checkout.href = '#';
+  checkout.innerText = 'Proceed to Checkout';
+
+  actions.appendChild(clearBtn);
+  actions.appendChild(checkout);
+
+  footer.appendChild(subtotal);
+  footer.appendChild(actions);
+
+  box.appendChild(list);
+  box.appendChild(footer);
+  container.appendChild(box);
+}

@@ -47,7 +47,10 @@ export function renderHeader(targetId = 'site-header') {
             <a href="/cart.html" class="open-cart flex items-center space-x-2 bg-gray-800 px-3 py-2 rounded">
               <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4"></path></svg>
               <span class="ml-1">Cart</span>
-              <span class="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-700 bg-white rounded-full">3</span>
+              <!-- Badge has id so scripts can update it: starts at 0 -->
+              <span id="cart-count" class="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-700 bg-white rounded-full">0</span>
+              <!-- Total (updated by app.js) -->
+              <span id="cart-total" class="ml-3 text-sm font-semibold text-white">$0.00</span>
             </a>
           </div>
         </div>

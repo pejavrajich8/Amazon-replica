@@ -1,7 +1,7 @@
 // Minimal Cart class module
 // Stores an array of items {id, name, price, qty}
 
-const STORAGE_KEY = 'mini_cart_v2';
+const STORAGE_KEY = 'cart-items';
 
 export default class Cart {
   constructor() {

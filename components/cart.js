@@ -1,3 +1,4 @@
+// Renders the shopping cart page
 export function renderCartPage(cart, targetId = 'cart-container', updateHeader = () => {}) {
   const container = document.getElementById(targetId);
   if (!container) return;
@@ -13,6 +14,8 @@ export function renderCartPage(cart, targetId = 'cart-container', updateHeader =
     container.appendChild(box);
     return;
   }
+
+// List of cart items
 
   const list = document.createElement('div');
   list.className = 'space-y-4';
@@ -49,6 +52,8 @@ export function renderCartPage(cart, targetId = 'cart-container', updateHeader =
 
     list.appendChild(row);
   });
+
+// Footer with subtotal and actions
 
   const footer = document.createElement('div');
   footer.className = 'mt-6 flex items-center justify-between';

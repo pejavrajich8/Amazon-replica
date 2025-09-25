@@ -9,8 +9,8 @@ export function renderHeader(targetId = 'site-header') {
       <!-- Brand -->
       <div class="flex items-center space-x-4">
         <div class="flex items-center space-x-2">
-          <div class="text-yellow-400 text-2xl font-extrabold">Amazon</div>
-          <div class="hidden sm:block text-gray-300">Marketplace</div>
+          <img src="/amazon-logo4.png" alt="Logo" class="w-30 h-10 mt-5 "/>
+        
         </div>
         <!-- Home button: small icon linking back to the main page -->
         <a href="/" aria-label="Home" class="ml-2 text-gray-300 hover:text-white hidden sm:inline-flex items-center">

@@ -1,9 +1,4 @@
-// Minimal Product class module
-// Usage: import Product from './product.js'
-
-
-
-
+// Product class representing a product item
 export default class Product {
   constructor({ id, name, description = '', price = 0 }) {
     this.id = id;

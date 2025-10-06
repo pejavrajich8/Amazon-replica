@@ -1,6 +1,3 @@
-// Minimal Cart class module
-// Stores an array of items {id, name, price, qty}
-
 const STORAGE_KEY = 'cart-items';
 
 export default class Cart {
@@ -22,9 +19,8 @@ export default class Cart {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(this.items));
   }
 
-  // Find item by id
   _find(id) {
-    return this.items.find(it => it.id === id);
+    return this.items.find(item => item.id === id);
   }
 
   add(product) {
@@ -38,7 +34,7 @@ export default class Cart {
   }
 
   remove(id) {
-    this.items = this.items.filter(it => it.id !== id);
+    this.items = this.items.filter(item => item.id !== id);
     this._save();
   }
 
@@ -48,11 +44,11 @@ export default class Cart {
   }
 
   getCount() {
-    return this.items.reduce((sum, it) => sum + (it.qty || 0), 0);
+    return this.items.reduce((sum, item) => sum + (item.qty || 0), 0);
   }
 
   getTotal() {
-    return this.items.reduce((sum, it) => sum + (it.qty || 0) * Number(it.price || 0), 0);
+    return this.items.reduce((sum, item) => sum + (item.qty || 0) * Number(item.price || 0), 0);
   }
 
   getItems() {

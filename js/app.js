@@ -1,36 +1,133 @@
 import Product from './product.js';
 import Cart from './cart.js';
-
 import { renderHeader } from '../components/header.js';
 import { renderFooter } from '../components/footer.js';
 import { renderCartPage } from '../components/cart.js';
+import renderProducts from './renderProducts.js';
 
-// Simple in-memory product data (could be fetched from an API)
-const PRODUCTS = [
-  { id: 'p1', name: 'Laptop', description: 'High performance laptop', price: 999.0 },
-  { id: 'p2', name: 'Headphones', description: 'Noise cancelling', price: 199.0 },
-  { id: 'p3', name: 'Mouse', description: 'Wireless mouse', price: 29.99 },
-  { id: 'p4', name: 'Plain Hooded Fleece Sweatshirt', description: 'Comfortable cotton blend', price: 24.0 },
-  { id: 'p5', name: 'Nonstick Oven Bakeware', description: 'Durable and easy to clean', price: 34.99 },
-  { id: 'p6', name: '2 Slot Toaster - Black', description: 'Fast and compact', price: 18.99 },
-  { id: 'p7', name: 'Luxury Towel Set - Graphite', description: 'Soft and absorbent', price: 35.99 },
-  { id: 'p8', name: '6 Piece White Dinner Plate Set', description: 'Dishwasher safe', price: 20.67 },
-];
+let PRODUCTS = [];
+const API_URL = 'https://www.totallyrad.dev/api/v1/products';
 
-// App bootstrap
-document.addEventListener('DOMContentLoaded', () => {
-  // Render shared header/footer
+function extractPrice(product) {
+  if (!product) return 0;
+  
+  // The API uses priceCents, so check that first
+  if (product.priceCents) {
+    return Number(product.priceCents) / 100;
+  }
+  
+  const toNumber = (value) => {
+    if (value === null || value === undefined) return NaN;
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string') {
+      const cleaned = String(value).replace(/[^0-9.-]+/g, '');
+      const num = Number(cleaned);
+      return isNaN(num) ? NaN : num;
+    }
+    return NaN;
+  };
+
+  // Check other common price fields
+  const candidates = [
+    product.price,
+    product.cost,
+    product.amount,
+    product.price_cents,
+    product.list_price,
+    product.price?.amount,
+    product.price?.value,
+    product.pricing?.price,
+    product.variants?.[0]?.price,
+  ];
+
+  for (const candidate of candidates) {
+    const price = toNumber(candidate);
+    if (!isNaN(price) && price > 0) {
+      return price;
+    }
+  }
+
+  return 0;
+}
+
+async function loadProducts() {
+  try {
+    const res = await fetch(API_URL);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    const items = Array.isArray(data) ? data 
+      : Array.isArray(data?.products) ? data.products
+      : Array.isArray(data?.data) ? data.data
+      : Array.isArray(data?.items) ? data.items
+      : [];
+
+    let normalized = items.map(p => {
+      const title = p.title ?? p.name ?? p.productName ?? 'Untitled';
+      const price = extractPrice(p);
+      const image = p.image ?? p.thumbnail ?? (Array.isArray(p.images) ? p.images[0] : '') ?? '';
+      
+      return {
+        id: p.id ?? p._id ?? String(Math.random()).slice(2),
+        title,
+        name: title,
+        description: p.description ?? p.summary ?? p.category ?? '',
+        price,
+        image,
+        thumbnail: p.thumbnail ?? image,
+        _raw: p,
+      };
+    });
+
+    PRODUCTS = normalized;
+  } catch (err) {
+    console.error('Failed to load products from API:', err);
+    PRODUCTS = [];
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
   try {
     renderHeader('site-header');
     renderFooter('site-footer');
   } catch (e) {
-    // Best-effort: continue even if components fail
-    // console.warn('Header/footer render failed', e);
+    console.warn('Header/footer render failed', e);
   }
 
   const cart = new Cart();
 
-  // Utilities to update header badges
+  window.addEventListener('cart-updated', () => {
+    try {
+      cart.items = cart._load();
+    } catch (e) {
+      const newCart = new Cart();
+      cart.items = newCart.items;
+    }
+    updateHeader();
+    renderCartPage(cart, 'cart-container', updateHeader);
+  });
+
+  await loadProducts();
+
+  try {
+    const prodById = new Map(PRODUCTS.map(p => [String(p.id), p]));
+    let changed = false;
+    cart.items = cart.items.map(item => {
+      const product = prodById.get(String(item.id));
+      if (product) {
+        const productPrice = Number(product.price) || 0;
+        if (!item.price || Number(item.price) !== productPrice) {
+          changed = true;
+          return { ...item, price: productPrice };
+        }
+      }
+      return item;
+    });
+    if (changed) cart._save();
+  } catch (e) {
+    console.warn('Cart reconciliation failed', e);
+  }
+
   function updateHeader() {
     const countEl = document.getElementById('cart-count');
     const totalEl = document.getElementById('cart-total');
@@ -38,59 +135,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if (totalEl) totalEl.innerText = `$${cart.getTotal().toFixed(2)}`;
   }
 
-
-  function addItemToCart(prod) {
-   const item = {
-      id: prod.id,
-      name: prod.name,
-      price: Number(prod.price) || 0,
+  function addItemToCart(product) {
+    const item = {
+      id: product.id,
+      name: product.name,
+      price: Number(product.price) || 0,
     };
-
-
     cart.add(item);
     updateHeader();
   }
 
 
-
-  // Render products into a grid. Supports either index page or product page containers.
-  function renderProductsGrid(targetId = 'product-grid') {
-    const container = document.getElementById(targetId);
-    if (!container) return;
-
-    // Build a responsive inner grid so we don't rely on static HTML
-    container.innerHTML = '';
-    const wrapper = document.createElement('div');
-    wrapper.className = 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8';
-
-    const grid = document.createElement('div');
-    grid.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6';
-
-    PRODUCTS.forEach(pd => {
-      const p = new Product(pd);
-      p.render(grid, addItemToCart);
-    });
-
-    wrapper.appendChild(grid);
-    container.appendChild(wrapper);
+  try {
+    renderProducts(PRODUCTS, 'product-grid');
+    renderProducts(PRODUCTS, 'product-container');
+  } catch (e) {
+    console.warn('Product rendering failed', e);
   }
 
-  // Render product listing on product detail page (single product container)
-  function renderProductList(targetId = 'product-container') {
-    const container = document.getElementById(targetId);
-    if (!container) return;
-    container.innerHTML = '';
-    PRODUCTS.forEach(pd => {
-      const p = new Product(pd);
-      p.render(container, addItemToCart);
-    });
-  }
-
-  // cart rendering is implemented in components/cart.js
-
-  // Initialize UI on whichever page we're on
-  renderProductsGrid('product-grid');
-  renderProductList('product-container');
   renderCartPage(cart, 'cart-container', updateHeader);
   updateHeader();
 });

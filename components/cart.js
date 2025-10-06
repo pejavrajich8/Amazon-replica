@@ -1,4 +1,3 @@
-// Renders the shopping cart page
 export function renderCartPage(cart, targetId = 'cart-container', updateHeader = () => {}) {
   const container = document.getElementById(targetId);
   if (!container) return;
@@ -15,45 +14,42 @@ export function renderCartPage(cart, targetId = 'cart-container', updateHeader =
     return;
   }
 
-// List of cart items
-
   const list = document.createElement('div');
   list.className = 'space-y-4';
 
-  items.forEach(it => {
+  items.forEach(item => {
     const row = document.createElement('div');
     row.className = 'flex items-center justify-between border-b pb-3';
 
     const left = document.createElement('div');
     left.className = 'flex-1';
-    left.innerHTML = `<div class="font-medium text-gray-900">${it.name}</div>
-        <div class="text-sm text-gray-500">Qty: ${it.qty}</div>`;
+    left.innerHTML = `
+      <div class="font-medium text-gray-900">${item.name}</div>
+      <div class="text-sm text-gray-500">Qty: ${item.qty}</div>
+    `;
 
     const right = document.createElement('div');
     right.className = 'flex items-center gap-4';
+    
     const price = document.createElement('div');
     price.className = 'text-right text-gray-900 font-semibold';
-    price.innerText = `$${(Number(it.price) * it.qty).toFixed(2)}`;
+    price.innerText = `$${(Number(item.price) * item.qty).toFixed(2)}`;
 
     const removeBtn = document.createElement('button');
     removeBtn.className = 'text-sm text-red-600 hover:underline';
     removeBtn.innerText = 'Remove';
     removeBtn.addEventListener('click', () => {
-      cart.remove(it.id);
+      cart.remove(item.id);
       renderCartPage(cart, targetId, updateHeader);
       updateHeader();
     });
 
     right.appendChild(price);
     right.appendChild(removeBtn);
-
     row.appendChild(left);
     row.appendChild(right);
-
     list.appendChild(row);
   });
-
-// Footer with subtotal and actions
 
   const footer = document.createElement('div');
   footer.className = 'mt-6 flex items-center justify-between';
@@ -63,6 +59,7 @@ export function renderCartPage(cart, targetId = 'cart-container', updateHeader =
   subtotal.innerText = `Subtotal: $${cart.getTotal().toFixed(2)}`;
 
   const actions = document.createElement('div');
+  
   const clearBtn = document.createElement('button');
   clearBtn.className = 'bg-red-500 text-white px-3 py-1 rounded mr-2';
   clearBtn.innerText = 'Clear Cart';
@@ -79,7 +76,6 @@ export function renderCartPage(cart, targetId = 'cart-container', updateHeader =
 
   actions.appendChild(clearBtn);
   actions.appendChild(checkout);
-
   footer.appendChild(subtotal);
   footer.appendChild(actions);
 

@@ -9,119 +9,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
 
-  <!--random comment-->
   <body class="bg-gray-50 min-h-screen flex flex-col">
-  <!-- Header loaded from components/header.html -->
-  <div id="site-header"></div>
-  <script type="module" src="/js/app.js"></script>
+    <div id="site-header"></div>
+    <script type="module" src="/js/app.js"></script>
+    <script type="module" src="/js/renderProducts.js"></script>
 
-  <!-- Main: product grid rendered inline for this demo -->
-  <main id="product-grid" class="flex-1 py-8">
+    <main id="product-grid" class="flex-1 py-8 p-4">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Responsive grid: changes columns by breakpoint -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <!-- Product card examples (static) - each article represents one product -->
-          <article class="bg-white rounded shadow-sm overflow-hidden">
-            <!-- Product image placeholder: keeps layout without external image -->
-            <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-500">Image placeholder</div>
-            <div class="p-4">
-              <!-- Title and meta -->
-              <h3 class="text-sm font-medium text-gray-900">Black and Gray Athletic Socks</h3>
-              <p class="mt-2 text-sm text-gray-500">6 Pairs</p>
-              <div class="mt-4 flex items-center justify-between">
-                <!-- Price and action -->
-                <div class="text-lg font-semibold text-gray-900">$10.90</div>
-                <button class="bg-yellow-400 text-black px-3 py-1 rounded">Add to Cart</button>
-              </div>
-            </div>
-          </article>
-
-          <!-- Additional product cards omitted for brevity (same structure as above) -->
-          <article class="bg-white rounded shadow-sm overflow-hidden">
-            <!-- Placeholder replaces original product image -->
-            <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-500">Image placeholder</div>
-            <div class="p-4">
-              <h3 class="text-sm font-medium text-gray-900">Intermediate Basketball</h3>
-              <p class="mt-2 text-sm text-gray-500">Sports</p>
-              <div class="mt-4 flex items-center justify-between">
-                <div class="text-lg font-semibold text-gray-900">$20.95</div>
-                <button class="bg-yellow-400 text-black px-3 py-1 rounded">Add to Cart</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="bg-white rounded shadow-sm overflow-hidden">
-            <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-500">Image placeholder</div>
-            <div class="p-4">
-              <h3 class="text-sm font-medium text-gray-900">Adults Plain Cotton T-Shirt</h3>
-              <p class="mt-2 text-sm text-gray-500">Clothing</p>
-              <div class="mt-4 flex items-center justify-between">
-                <div class="text-lg font-semibold text-gray-900">$7.99</div>
-                <button class="bg-yellow-400 text-black px-3 py-1 rounded">Add to Cart</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="bg-white rounded shadow-sm overflow-hidden">
-            <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-500">Image placeholder</div>
-            <div class="p-4">
-              <h3 class="text-sm font-medium text-gray-900">2 Slot Toaster - Black</h3>
-              <p class="mt-2 text-sm text-gray-500">Home</p>
-              <div class="mt-4 flex items-center justify-between">
-                <div class="text-lg font-semibold text-gray-900">$18.99</div>
-                <button class="bg-yellow-400 text-black px-3 py-1 rounded">Add to Cart</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="bg-white rounded shadow-sm overflow-hidden">
-            <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-500">Image placeholder</div>
-            <div class="p-4">
-              <h3 class="text-sm font-medium text-gray-900">6 Piece White Dinner Plate Set</h3>
-              <p class="mt-2 text-sm text-gray-500">Kitchen</p>
-              <div class="mt-4 flex items-center justify-between">
-                <div class="text-lg font-semibold text-gray-900">$20.67</div>
-                <button class="bg-yellow-400 text-black px-3 py-1 rounded">Add to Cart</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="bg-white rounded shadow-sm overflow-hidden">
-            <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-500">Image placeholder</div>
-            <div class="p-4">
-              <h3 class="text-sm font-medium text-gray-900">Nonstick Oven Bakeware</h3>
-              <p class="mt-2 text-sm text-gray-500">Kitchen</p>
-              <div class="mt-4 flex items-center justify-between">
-                <div class="text-lg font-semibold text-gray-900">$34.99</div>
-                <button class="bg-yellow-400 text-black px-3 py-1 rounded">Add to Cart</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="bg-white rounded shadow-sm overflow-hidden">
-            <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-500">Image placeholder</div>
-            <div class="p-4">
-              <h3 class="text-sm font-medium text-gray-900">Plain Hooded Fleece Sweatshirt</h3>
-              <p class="mt-2 text-sm text-gray-500">Clothing</p>
-              <div class="mt-4 flex items-center justify-between">
-                <div class="text-lg font-semibold text-gray-900">$24.00</div>
-                <button class="bg-yellow-400 text-black px-3 py-1 rounded">Add to Cart</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="bg-white rounded shadow-sm overflow-hidden">
-            <!-- Placeholder replaces remaining product image -->
-            <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-500">Image placeholder</div>
-            <div class="p-4">
-              <h3 class="text-sm font-medium text-gray-900">Luxury Towel Set - Graphite</h3>
-              <p class="mt-2 text-sm text-gray-500">Home</p>
-              <div class="mt-4 flex items-center justify-between">
-                <div class="text-lg font-semibold text-gray-900">$35.99</div>
-                <button class="bg-yellow-400 text-black px-3 py-1 rounded">Add to Cart</button>
-              </div>
-            </div>
-          </article>
+        <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         </div>
       </div>
     </main>
